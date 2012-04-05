@@ -43,6 +43,7 @@ int main(int argc, char *argv[]){
 
 	int mode           = MODE_INVALID;
 	unsigned long port = DEFAULT_PORT;
+	char *host         = NULL;
 
 	unsigned int i;
 
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]){
 			break;
 		case 'c':
 			mode = MODE_CLIENT;
+			host = optarg;
 			break;
 		case 'p':
 			port = atoi(optarg);
@@ -74,6 +76,15 @@ int main(int argc, char *argv[]){
 		return(EXIT_FAILURE);
 	}
 
+	if(! net_init())
+		return(EXIT_FAILURE);
+
+#ifdef DEBUG
+	printf("Host: %s\n", host);
+	printf("Port: %ld\n", port);
+	printf("Mode: %s\n", mode == MODE_CLIENT ? "Client" : "Server");
+#endif
+
 	ui_nullify();
 	initscr();
 	cbreak();
@@ -83,13 +94,23 @@ int main(int argc, char *argv[]){
 	ui_resized(); 
 	ui_init();
 
+	unsigned long c = 0;
+
 	while(getch() != 27) {
 
 		if(ui_resized())
-			ui_init();
+			ui_resize();
+		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
+
+		wprintw(UI_TOP.win, "Test %d\n", c++);
+		wprintw(UI_BOT.win, "Fist %d", c++);
+		wprintw(UI_BOT.win, "Fist %d\n", c++);
+		ui_refresh();
 
 		usleep(50000);
 	}
+
+	endwin();
 
 	return(EXIT_SUCCESS);
 }

@@ -5,7 +5,7 @@ SHELL = bash
 #CFLAGS = -I../../src/ -L../../src/ -std=gnu99 -ggdb3 -Wall -lgam $(GAMFLAGS) `sdl-config --cflags`
 #CFLAGS = -std=gnu99 -ggdb3 -Wall `sdl-config --cflags`
 CFLAGS = -ggdb3 -Wall `sdl-config --cflags`
-LFLAGS = -lncurses `sdl-config --libs`
+LFLAGS = -lncurses `sdl-config --libs` -lSDL_net
 
 CC     = gcc
 OBJS   = $(patsubst %.c, %.o, $(wildcard ./*.c))

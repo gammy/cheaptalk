@@ -29,6 +29,6 @@ void ui_destroy(void);
 void ui_refresh(void);
 int  ui_resized(void);
 void ui_init(void);
+void ui_resize(void);
 void ui_handle_wench(int s);
-
 #endif

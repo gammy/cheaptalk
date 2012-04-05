@@ -11,13 +11,11 @@
 #include <libgen.h> // basename
 #include <getopt.h>
 #include <math.h>   // ceil
-#include <SDL.h>
 
 #include <assert.h>
 
 #include "ui.h"
-
-#define DEFAULT_PORT 13512
+#include "net.h"
 
 enum {
 	MODE_INVALID,
