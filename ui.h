@@ -10,16 +10,16 @@ typedef struct {
 	int w, h;
 } screen_t;
 
-// *Main******************
-// * Top                 *
-// *Separator*************
-// * Bottom              *
-// ***********************
+// +Main-----------------+
+// | Top                 |
+// |Separator------------|
+// | Bottom              |
+// +---------------------+
 
 screen_t ui_win[4];
 
 #define UI_TOP		(ui_win[0])
-#define UI_LINE		(ui_win[1])
+#define UI_SEP		(ui_win[1])
 #define UI_BOT		(ui_win[2])
 #define UI_MAIN		(ui_win[3])
 

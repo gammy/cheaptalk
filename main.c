@@ -85,6 +85,9 @@ int main(int argc, char *argv[]){
 	printf("Mode: %s\n", mode == MODE_CLIENT ? "Client" : "Server");
 #endif
 
+	if(! net_begin(mode, host, port))
+		return(EXIT_FAILURE);
+
 	ui_nullify();
 	initscr();
 	cbreak();
@@ -94,23 +97,24 @@ int main(int argc, char *argv[]){
 	ui_resized(); 
 	ui_init();
 
-	unsigned long c = 0;
-
 	while(getch() != 27) {
 
 		if(ui_resized())
 			ui_resize();
-		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
 
-		wprintw(UI_TOP.win, "Test %d\n", c++);
-		wprintw(UI_BOT.win, "Fist %d", c++);
-		wprintw(UI_BOT.win, "Fist %d\n", c++);
+		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
+		
+		//wprintw(UI_TOP.win, "Test\n");
+		//wprintw(UI_BOT.win, "Fist");
+		//wprintw(UI_BOT.win, "Fist\n");
+
 		ui_refresh();
 
 		usleep(50000);
 	}
 
 	endwin();
+	net_deinit();
 
 	return(EXIT_SUCCESS);
 }
