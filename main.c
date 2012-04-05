@@ -2,9 +2,9 @@
  * Goal: Very simple p2p realtime chat which visually resembles 'talk'
  * - No daemon/multiuser/tty/user stuff, just simple p2p
  *
- * - Use half the horizontal height of a terminal for each user
  * - Realtime character-by-character tx/rx (no utf-8 support)
  * - Allow resizing of terminal
+ * - Use half the horizontal height of a terminal for each user
  * - Allow ANSI codes
  * - Use SDL_Net for sockets
 */

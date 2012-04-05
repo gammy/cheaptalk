@@ -34,6 +34,7 @@ int ui_resized(void) {
 
 	getmaxyx(stdscr, h, w);
 
+
 	if(w != UI_MAIN.w || h != UI_MAIN.h) {
 		UI_MAIN.w = w;
 		UI_MAIN.h = h;
@@ -42,14 +43,19 @@ int ui_resized(void) {
 		return(0);
 }
 
+
 void ui_init(void) {
 	// Destroy subwindows (main window is left intact)
 	ui_destroy();
 	ui_nullify();	
 
 	int chatwin_height = ((int) (ceil(UI_MAIN.h / 2.0f))) - 1;
+
+	if(chatwin_height < UI_MIN_HEIGHT)
+		chatwin_height = UI_MIN_HEIGHT;
+
 	clear();
-	refresh(); // XXX *REQUIRED* for everything to work
+	refresh(); // XXX Required for everything to work
 
 	// Create subwindows
 	// Top

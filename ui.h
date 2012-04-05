@@ -3,15 +3,17 @@
 
 #include "main.h"
 
+#define UI_MIN_HEIGHT 5
+
 typedef struct {
 	WINDOW *win;
 	int w, h;
 } screen_t;
 
-// *Screen****************
-// * Me (always top)     *
+// *Main******************
+// * Top                 *
 // *Separator*************
-// * You (always bottom) *
+// * Bottom              *
 // ***********************
 
 screen_t ui_win[4];
