@@ -84,29 +84,12 @@ int main(int argc, char *argv[]){
 	ui_resized();
 	ui_init();
 
-	unsigned long counter = 0;
-	
 	while(getch() != 27) {
 
-		if(ui_resized()) {
+		if(ui_resized())
 			ui_init();
 
-			ui_refresh();
-			//mvwprintw(UI_CLIENT.win, 1, 1, "%dx%d ", UI_MAIN.w, UI_MAIN.h);
-			//mvwprintw(UI_CLIENT.win, 2, 2, "%d", counter);
-		}
-
-		//mvwprintw(UI_MAIN.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
-
-		//refresh();
-	//box(UI_CLIENT.win, 0, 0);
-//		mvprintw(0, 0, "%p ", (void *) UI_CLIENT.win);
-//		mvprintw(1, 0, "%p ", (void *) UI_LINE.win);
-//		mvprintw(2, 0, "%p ", (void *) UI_SERVER.win);
-//		wrefresh(stdscr);
-
 		usleep(50000);
-		counter++;
 	}
 
 	return(EXIT_SUCCESS);
