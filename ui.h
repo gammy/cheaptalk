@@ -16,9 +16,9 @@ typedef struct {
 
 screen_t ui_win[4];
 
-#define UI_CLIENT		(ui_win[0])
+#define UI_TOP		(ui_win[0])
 #define UI_LINE		(ui_win[1])
-#define UI_SERVER		(ui_win[2])
+#define UI_BOT		(ui_win[2])
 #define UI_MAIN		(ui_win[3])
 
 void ui_nullify(void);

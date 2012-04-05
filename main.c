@@ -80,8 +80,7 @@ int main(int argc, char *argv[]){
 	noecho();
 	nodelay(stdscr, TRUE);
 	start_color();
-
-	ui_resized();
+	ui_resized(); 
 	ui_init();
 
 	while(getch() != 27) {

@@ -53,25 +53,25 @@ void ui_init(void) {
 
 	// Create subwindows
 	// Top
-	UI_CLIENT.win = newwin(chatwin_height, UI_MAIN.w, 0, 0);
-	assert(UI_CLIENT.win != NULL);
-	getmaxyx(UI_CLIENT.win, UI_CLIENT.h, UI_CLIENT.w);
+	UI_TOP.win = newwin(chatwin_height, UI_MAIN.w, 0, 0);
+	assert(UI_TOP.win != NULL);
+	getmaxyx(UI_TOP.win, UI_TOP.h, UI_TOP.w);
 
 	// Line
-	UI_LINE.win = newwin(1, UI_MAIN.w, UI_CLIENT.h, 0);
+	UI_LINE.win = newwin(1, UI_MAIN.w, UI_TOP.h, 0);
 	assert(UI_LINE.win != NULL);
 	getmaxyx(UI_LINE.win, UI_LINE.h, UI_LINE.w);
 
 	// Bottom
-	UI_SERVER.win = newwin(chatwin_height, UI_MAIN.w, UI_CLIENT.h + UI_LINE.h, 0);
-	assert(UI_SERVER.win != NULL);
-	getmaxyx(UI_SERVER.win, UI_SERVER.h, UI_SERVER.w);
+	UI_BOT.win = newwin(chatwin_height, UI_MAIN.w, UI_TOP.h + UI_LINE.h, 0);
+	assert(UI_BOT.win != NULL);
+	getmaxyx(UI_BOT.win, UI_BOT.h, UI_BOT.w);
 
 	ui_clear();
 
 #ifdef DEBUG
-	box(UI_CLIENT.win, 0, 0);
-	box(UI_SERVER.win, 0, 0);
+	box(UI_TOP.win, 0, 0);
+	box(UI_BOT.win, 0, 0);
 #endif
 	whline(UI_LINE.win, ACS_HLINE, UI_LINE.w);
 	ui_refresh();
