@@ -107,12 +107,10 @@ int main(int argc, char *argv[]){
 			ui_resize();
 
 		// Local input to top window
-		int c = getch();
-		if(c != ERR) {
-			wprintw(UI_TOP.win, "%c", c);
-		}
+		int c = wgetch(UI_TOP.win);
 
-		
+		ui_keypress(c);
+
 		// Remote data to bottom window
 		//net_read(mode);
 
@@ -124,7 +122,7 @@ int main(int argc, char *argv[]){
 
 		ui_refresh();
 
-		usleep(50000);
+		usleep(1000);
 	}
 
 	endwin();

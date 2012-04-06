@@ -134,3 +134,67 @@ void ui_handle_wench(int s) {
 }
 
 #endif
+
+// Warning: reentrant
+void ui_keypress(int c) {
+
+	static char escape, meta;
+
+	if(c == ERR || c >= KEY_MIN)
+		return;
+
+	int x, y;
+	getyx(UI_TOP.win, y, x);
+
+	if(escape) {
+		if(meta) {
+			switch(c) {
+				case 'C': // Right arrow
+					if(x < UI_TOP.w - 1) {
+						x++;
+						wmove(UI_TOP.win, y, x);
+					}
+					break;
+				case 'D': // Left arrow
+					if(x > 0) {
+						x--;
+						wmove(UI_TOP.win, y, x);
+					}
+					break;
+				default:
+					break;
+			}
+			meta = escape = 0;
+		} else {
+			switch(c) {
+				case 91:
+					meta = 1;
+					break;
+				default:
+					break;
+			}
+		}
+
+	} else {
+		switch(c) {
+			case 27: // Escape
+				escape = 1;
+				break;
+			case KEY_BACKSPACE: // Bullshit
+			case 127:
+				if(x > 0) {
+					wmove(UI_TOP.win, y, x - 1);
+					wprintw(UI_TOP.win, " ");
+					x--;
+					wmove(UI_TOP.win, y, x);
+				}
+				break;
+
+			default:
+				//wprintw(UI_TOP.win, "%c = %d\n", c, c);
+				wprintw(UI_TOP.win, "%c", c);
+				break;
+		}
+	}
+		
+}
