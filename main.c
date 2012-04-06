@@ -103,8 +103,8 @@ int main(int argc, char *argv[]){
 
 	while(busy) {
 
-		if(ui_resized())
-			ui_resize();
+		//if(ui_resized())
+		//	ui_resize();
 
 		// Local input to top window
 		int c = getch();
@@ -112,7 +112,6 @@ int main(int argc, char *argv[]){
 			wprintw(UI_TOP.win, "%c", c);
 		}
 
-		
 		// Remote data to bottom window
 		//net_read(mode);
 
