@@ -33,5 +33,5 @@ void ui_resize(void);
 #if 0
 void ui_handle_wench(int s);
 #endif
-void ui_keypress(int c);
+void ui_keypress(screen_t *screen, int c);
 #endif

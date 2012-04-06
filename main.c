@@ -109,7 +109,7 @@ int main(int argc, char *argv[]){
 		// Local input to top window
 		int c = wgetch(UI_TOP.win);
 
-		ui_keypress(c);
+		ui_keypress(&UI_TOP, c);
 
 		// Remote data to bottom window
 		//net_read(mode);

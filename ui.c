@@ -136,7 +136,7 @@ void ui_handle_wench(int s) {
 #endif
 
 // Warning: reentrant
-void ui_keypress(int c) {
+void ui_keypress(screen_t *screen, int c) {
 
 	static char escape, meta;
 
@@ -144,21 +144,21 @@ void ui_keypress(int c) {
 		return;
 
 	int x, y;
-	getyx(UI_TOP.win, y, x);
+	getyx(screen->win, y, x);
 
 	if(escape) {
 		if(meta) {
 			switch(c) {
 				case 'C': // Right arrow
-					if(x < UI_TOP.w - 1) {
+					if(x < screen->w - 1) {
 						x++;
-						wmove(UI_TOP.win, y, x);
+						wmove(screen->win, y, x);
 					}
 					break;
 				case 'D': // Left arrow
 					if(x > 0) {
 						x--;
-						wmove(UI_TOP.win, y, x);
+						wmove(screen->win, y, x);
 					}
 					break;
 				default:
@@ -183,16 +183,16 @@ void ui_keypress(int c) {
 			case KEY_BACKSPACE: // Bullshit
 			case 127:
 				if(x > 0) {
-					wmove(UI_TOP.win, y, x - 1);
-					wprintw(UI_TOP.win, " ");
+					wmove(screen->win, y, x - 1);
+					wprintw(screen->win, " ");
 					x--;
-					wmove(UI_TOP.win, y, x);
+					wmove(screen->win, y, x);
 				}
 				break;
 
 			default:
-				//wprintw(UI_TOP.win, "%c = %d\n", c, c);
-				wprintw(UI_TOP.win, "%c", c);
+				//wprintw(screen->win, "%c = %d\n", c, c);
+				wprintw(screen->win, "%c", c);
 				break;
 		}
 	}
