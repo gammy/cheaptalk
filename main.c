@@ -1,12 +1,12 @@
 /*
  * Goal: Very simple p2p realtime chat which visually resembles 'talk'
- * - No daemon/multiuser/tty/user stuff, just simple p2p
+ * - No daemon/multiuser/tty/user stuff, just p2p
  *
- * - Realtime character-by-character tx/rx (no utf-8 support)
+ * - Realtime character-by-character tx/rx (no utf-8 support, eg won't use widechars)
  * - Allow resizing of terminal
  * - Use half the horizontal height of a terminal for each user
  * - Allow ANSI codes
- * - Use SDL_Net for sockets
+ * - Use SDL_Net for networking (easily replaced with othher interface)
 */
 
 #include "main.h"
@@ -48,25 +48,25 @@ int main(int argc, char *argv[]){
 	unsigned int i;
 
 	while((i = getopt_long(argc, argv, "lc:p:Vh", long_options, NULL)) != -1){
-		switch(i){
-		case 'l':
-			mode = MODE_SERVER;
-			break;
-		case 'c':
-			mode = MODE_CLIENT;
-			host = optarg;
-			break;
-		case 'p':
-			port = atoi(optarg);
-			break;
-		case 'h':
-			usage(basename(argv[0]));
-			return(EXIT_SUCCESS);
-		case 'V':
-			printf("Cheaptalk v%s by gammy\n", VERSION);
-			return(EXIT_SUCCESS);
-		default:
-			break;
+		switch(i) {
+			case 'l':
+				mode = MODE_SERVER;
+				break;
+			case 'c':
+				mode = MODE_CLIENT;
+				host = optarg;
+				break;
+			case 'p':
+				port = atoi(optarg);
+				break;
+			case 'h':
+				usage(basename(argv[0]));
+				return(EXIT_SUCCESS);
+			case 'V':
+				printf("Cheaptalk v%s by gammy\n", VERSION);
+				return(EXIT_SUCCESS);
+			default:
+				break;
 		}
 	}
 
@@ -80,27 +80,41 @@ int main(int argc, char *argv[]){
 		return(EXIT_FAILURE);
 
 #ifdef DEBUG
-	printf("Host: %s\n", host);
+	if(mode == MODE_CLIENT)
+		printf("Host: %s\n", host);
 	printf("Port: %ld\n", port);
 	printf("Mode: %s\n", mode == MODE_CLIENT ? "Client" : "Server");
 #endif
 
-	if(! net_begin(mode, host, port))
-		return(EXIT_FAILURE);
+	//if(! net_begin(mode, host, port))
+	//	return(EXIT_FAILURE);
 
 	ui_nullify();
 	initscr();
 	cbreak();
 	noecho();
 	nodelay(stdscr, TRUE);
-	start_color();
+	use_default_colors(); // Ensure user-set bg and/or fg-colors are respected
+	start_color();        // We want to allow passing ANSI color, so we need color
 	ui_resized(); 
 	ui_init();
 
-	while(getch() != 27) {
+	char busy = 1; // FIXME maybe make global later so we can catch interrupts and shut down
+
+	while(busy) {
 
 		if(ui_resized())
 			ui_resize();
+
+		// Local input to top window
+		int c = getch();
+		if(c != ERR) {
+			wprintw(UI_TOP.win, "%c", c);
+		}
+
+		
+		// Remote data to bottom window
+		//net_read(mode);
 
 		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
 		

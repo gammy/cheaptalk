@@ -30,5 +30,7 @@ void ui_refresh(void);
 int  ui_resized(void);
 void ui_init(void);
 void ui_resize(void);
+#if 0
 void ui_handle_wench(int s);
+#endif
 #endif
