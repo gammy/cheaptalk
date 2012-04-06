@@ -44,33 +44,29 @@ int ui_resized(void) {
 
 
 void ui_init(void) {
-	// Destroy subwindows (main window is left intact)
+
 	ui_destroy();
 	ui_nullify();	
 
-	int chatwin_height = (int) UI_MAIN.h / 2.0f;
+	int h = (int) UI_MAIN.h / 2.0f;
 
-	if(chatwin_height < UI_MIN_HEIGHT)
-		chatwin_height = UI_MIN_HEIGHT;
+	if(h < UI_MIN_HEIGHT)
+		h = UI_MIN_HEIGHT;
 
 	clear();
 	refresh(); // XXX Required for everything to work
 
-	// Create subwindows
-	// Top
-	UI_TOP.win = newwin(chatwin_height, UI_MAIN.w, 0, 0);
+	UI_TOP.win = newwin(h, UI_MAIN.w, 0, 0);
 	assert(UI_TOP.win != NULL);
 	getmaxyx(UI_TOP.win, UI_TOP.h, UI_TOP.w);
 	//idlok(UI_TOP.win, TRUE);
 	scrollok(UI_TOP.win, TRUE);
 
-	// Line
 	UI_SEP.win = newwin(1, UI_MAIN.w, UI_TOP.h, 0);
 	assert(UI_SEP.win != NULL);
 	getmaxyx(UI_SEP.win, UI_SEP.h, UI_SEP.w);
 
-	// Bottom
-	UI_BOT.win = newwin(chatwin_height - ((UI_MAIN.h & 1) == 0 ? 1 : 0), UI_MAIN.w, UI_TOP.h + UI_SEP.h, 0);
+	UI_BOT.win = newwin(h - ((UI_MAIN.h & 1) == 0 ? 1 : 0), UI_MAIN.w, UI_TOP.h + UI_SEP.h, 0);
 	assert(UI_BOT.win != NULL);
 	getmaxyx(UI_BOT.win, UI_BOT.h, UI_BOT.w);
 	//idlok(UI_BOT.win, TRUE);
@@ -83,44 +79,49 @@ void ui_init(void) {
 	box(UI_BOT.win, 0, 0);
 #endif
 	whline(UI_SEP.win, ACS_HLINE, UI_SEP.w);
+
+	wmove(UI_TOP.win, UI_TOP.h - 1, 0);
+	wmove(UI_BOT.win, UI_BOT.h - 1, 0);
+
 	ui_refresh();
 
 }
 
 void ui_resize(void) {
 
-	int chatwin_height = (int) UI_MAIN.h / 2.0f;
+	int h = (int) UI_MAIN.h / 2.0f;
 
-	if(chatwin_height < UI_MIN_HEIGHT)
-		chatwin_height = UI_MIN_HEIGHT;
+	if(h < UI_MIN_HEIGHT)
+		h = UI_MIN_HEIGHT;
+
+	UI_TOP.w = UI_SEP.w = UI_BOT.w = UI_MAIN.w;
+
+	UI_TOP.h = h;
+	UI_SEP.h = 1;
+	UI_BOT.h = h - ((UI_MAIN.h & 1) == 0 ? 1 : 0);
 
 	clear();
 	refresh(); // XXX Required for everything to work
 
-	wresize(UI_TOP.win, chatwin_height, UI_MAIN.w);
-	//getmaxyx(UI_TOP.win, UI_TOP.h, UI_TOP.w);
-	UI_TOP.w = UI_MAIN.w;
-	UI_TOP.h = chatwin_height;
-	mvwin(UI_TOP.win, 0, 0);
+	wresize(UI_TOP.win, UI_TOP.h, UI_TOP.w);
+	wresize(UI_SEP.win, UI_SEP.h, UI_SEP.w);
+	wresize(UI_BOT.win, UI_BOT.h, UI_BOT.w);
 
-	wresize(UI_SEP.win, 1, UI_MAIN.w);
-	//getmaxyx(UI_SEP.win, UI_SEP.h, UI_SEP.w);
-	UI_SEP.w = UI_MAIN.w;
-	UI_SEP.h = 1;
-	mvwin(UI_SEP.win, UI_TOP.h, 0);
 	wclear(UI_SEP.win);
 	whline(UI_SEP.win, ACS_HLINE, UI_SEP.w);
 
-	wresize(UI_BOT.win, chatwin_height - ((UI_MAIN.h & 1) == 0 ? 1 : 0) , UI_MAIN.w);
-	//getmaxyx(UI_BOT.win, UI_BOT.h, UI_BOT.w);
-	UI_BOT.w = UI_MAIN.w;
-	UI_BOT.h = chatwin_height;
+	mvwin(UI_TOP.win, 0, 0);
+	mvwin(UI_SEP.win, UI_TOP.h, 0);
 	mvwin(UI_BOT.win, UI_TOP.h + UI_SEP.h, 0);
 
 #if 0
 	box(UI_TOP.win, 0, 0);
 	box(UI_BOT.win, 0, 0);
 #endif
+
+	wmove(UI_TOP.win, UI_TOP.h - 1, 0);
+	wmove(UI_BOT.win, UI_BOT.h - 1, 0);
+
 	ui_refresh();
 }
 
