@@ -48,7 +48,7 @@ void ui_init(void) {
 	ui_destroy();
 	ui_nullify();	
 
-	int chatwin_height = ((int) (ceil(UI_MAIN.h / 2.0f))) - 1;
+	int chatwin_height = (int) UI_MAIN.h / 2.0f;
 
 	if(chatwin_height < UI_MIN_HEIGHT)
 		chatwin_height = UI_MIN_HEIGHT;
@@ -70,7 +70,7 @@ void ui_init(void) {
 	getmaxyx(UI_SEP.win, UI_SEP.h, UI_SEP.w);
 
 	// Bottom
-	UI_BOT.win = newwin(chatwin_height, UI_MAIN.w, UI_TOP.h + UI_SEP.h, 0);
+	UI_BOT.win = newwin(chatwin_height - ((UI_MAIN.h & 1) == 0 ? 1 : 0), UI_MAIN.w, UI_TOP.h + UI_SEP.h, 0);
 	assert(UI_BOT.win != NULL);
 	getmaxyx(UI_BOT.win, UI_BOT.h, UI_BOT.w);
 	//idlok(UI_BOT.win, TRUE);
@@ -88,9 +88,8 @@ void ui_init(void) {
 }
 
 void ui_resize(void) {
-	//getmaxyx(UI_MAIN.win, UI_MAIN.h, UI_MAIN.w);
 
-	int chatwin_height = ((int) (ceil(UI_MAIN.h / 2.0f))) - 1;
+	int chatwin_height = (int) UI_MAIN.h / 2.0f;
 
 	if(chatwin_height < UI_MIN_HEIGHT)
 		chatwin_height = UI_MIN_HEIGHT;
@@ -98,16 +97,13 @@ void ui_resize(void) {
 	clear();
 	refresh(); // XXX Required for everything to work
 
-
-	if(wresize(UI_TOP.win, chatwin_height, UI_MAIN.w) != OK)
-		abort();
+	wresize(UI_TOP.win, chatwin_height, UI_MAIN.w);
 	//getmaxyx(UI_TOP.win, UI_TOP.h, UI_TOP.w);
 	UI_TOP.w = UI_MAIN.w;
 	UI_TOP.h = chatwin_height;
 	mvwin(UI_TOP.win, 0, 0);
 
-	if(wresize(UI_SEP.win, 1, UI_MAIN.w) != OK)
-		abort();
+	wresize(UI_SEP.win, 1, UI_MAIN.w);
 	//getmaxyx(UI_SEP.win, UI_SEP.h, UI_SEP.w);
 	UI_SEP.w = UI_MAIN.w;
 	UI_SEP.h = 1;
@@ -115,8 +111,7 @@ void ui_resize(void) {
 	wclear(UI_SEP.win);
 	whline(UI_SEP.win, ACS_HLINE, UI_SEP.w);
 
-	if(wresize(UI_BOT.win, chatwin_height, UI_MAIN.w) != OK)
-		abort();
+	wresize(UI_BOT.win, chatwin_height - ((UI_MAIN.h & 1) == 0 ? 1 : 0) , UI_MAIN.w);
 	//getmaxyx(UI_BOT.win, UI_BOT.h, UI_BOT.w);
 	UI_BOT.w = UI_MAIN.w;
 	UI_BOT.h = chatwin_height;
