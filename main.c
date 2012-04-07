@@ -7,6 +7,8 @@
  *   [X] Use half the horizontal height of a terminal for each user
  *   [X] Allow ANSI codes
  *     [ ] Translate ANSI text attributes to ncurses 
+ *
+ *
 */
 
 #include "main.h"
@@ -28,6 +30,43 @@ void usage(char *me) {
 	       "FOR A PARTICULAR PURPOSE.\n\n",
 	       VERSION, 
 	       me, me, me);
+}
+
+void signal_handle(int sig) {
+	endwin();
+	fprintf(stderr, "Caught signal %d\n", sig);
+	net_deinit();
+	exit(EXIT_SUCCESS);
+}
+
+void signal_install(void) {
+
+	struct sigaction sig_act_old, sig_act_new;
+
+	sig_act_new.sa_handler = signal_handle;
+	sigemptyset(&sig_act_new.sa_mask);
+
+	sig_act_new.sa_flags = 0;
+
+	sigaction(SIGINT, NULL, &sig_act_old);
+
+	if(sig_act_old.sa_handler != SIG_IGN)
+		sigaction(SIGINT, &sig_act_new, NULL);
+
+	sigaction(SIGHUP, NULL, &sig_act_old);
+
+	if(sig_act_old.sa_handler != SIG_IGN)
+		sigaction(SIGHUP, &sig_act_new, NULL);
+
+	sigaction(SIGTERM, NULL, &sig_act_old);
+
+	if(sig_act_old.sa_handler != SIG_IGN)
+		sigaction(SIGTERM, &sig_act_new, NULL);
+	
+	sigaction(SIGPIPE, NULL, &sig_act_old);
+
+	if(sig_act_old.sa_handler != SIG_IGN)
+		sigaction(SIGPIPE, &sig_act_new, NULL);
 }
 
 int main(int argc, char *argv[]){
@@ -75,6 +114,8 @@ int main(int argc, char *argv[]){
 		usage(basename(argv[0]));
 		return(EXIT_FAILURE);
 	}
+	
+	signal_install();
 
 	if(! net_init())
 		return(EXIT_FAILURE);
@@ -104,16 +145,20 @@ int main(int argc, char *argv[]){
 	int counter = 0;
 #endif
 
-	for(;;) {
+	busy = 1;
+
+	while(busy) {
 
 		if(ui_resized())
 			ui_resize();
 
-		int c = wgetch(UI_TOP.win);
+		chtype c = wgetch(UI_TOP.win);
 
 		ui_keypress(&UI_TOP, c);
 		if(c != ERR)
 			net_send(mode, &c);
+
+		c = ERR;
 
 		if(net_recv(mode, &c))
 			ui_keypress(&UI_BOT, c);
@@ -126,6 +171,9 @@ int main(int argc, char *argv[]){
 
 		usleep(5000);
 	}
+
+	endwin();
+	net_deinit();
 
 	return(EXIT_SUCCESS);
 }

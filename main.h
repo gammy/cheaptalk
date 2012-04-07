@@ -17,6 +17,8 @@
 #include "ui.h"
 #include "net.h"
 
+char busy;
+
 enum {
 	MODE_INVALID,
 	MODE_SERVER,
