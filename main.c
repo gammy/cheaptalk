@@ -8,15 +8,19 @@
  *   [X] Use half the horizontal height of a terminal for each user
  *   [X] Allow ANSI codes
  *     [ ] Translate ANSI text attributes to ncurses 
+ *         (but why bother? How would you 'paste' escape sequences to the buffer?)
+ *
+ * Missing (which talk can do)
+ * - Scroll in buffer (ctrl+p/n in talk, only for the bottom buffer?)
  *
  * Added:
  * - Simple color selection with ESC 0-6 or ESC r,g,b
+ * - Move freely (with arrow keys) within the buffer 
+ *   (note that hitting return will clear the line from the point of the cursor)
  *
-*/
+ */
 
 #include "main.h"
-
-#define VERSION "0.1"
 
 void usage(char *me) {
 	printf("Cheaptalk v%s by gammy\n"

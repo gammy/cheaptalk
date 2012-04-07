@@ -2,6 +2,7 @@
 #define MAIN_H
 
 //#define DEBUG
+#define VERSION "0.1"
 
 #include <stdio.h>
 #include <stdlib.h>
