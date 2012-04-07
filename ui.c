@@ -159,15 +159,14 @@ void ui_keypress(screen_t *screen, int c) {
 					if(y < screen->h - 1)
 						y++;
 					break;
-				case 'C': // Right arrow
-					// FIXME I know this is off by one.
-					//       It seems impossible to fix.
-					if(x < screen->w - 2)
-						x++;
-					break;
 				case 'D': // Left arrow
 					if(x > 0)
 						x--;
+					break;
+				case 'C': // Right arrow
+					// FIXME this off by one is required, or oddities occur.
+					if(x < screen->w - 2)
+						x++;
 					break;
 				default:
 					break;
