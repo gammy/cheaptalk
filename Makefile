@@ -2,9 +2,8 @@
 EXE = cheaptalk
 SHELL = bash
 
-CFLAGS = -DUSE_SDL -ggdb3 -Wall `sdl-config --cflags`
-LFLAGS = -lncurses `sdl-config --libs` -lSDL_net
-
+CFLAGS = -ggdb3 -Wall
+LFLAGS = -lncurses 
 CC     = gcc
 OBJS   = $(patsubst %.c, %.o, $(wildcard ./*.c))
 

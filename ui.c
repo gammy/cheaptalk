@@ -26,7 +26,7 @@ void ui_refresh(void) {
 	// This is in reverse order to ensure that the cursor is always last
 	// set for the top window (ui_win[0] = UI_TOP)
 	int i;
-	for(i = 2; i > 0; i--)
+	for(i = 2; i >= 0; i--)
 		if(ui_win[i].win != NULL)
 			wrefresh(ui_win[i].win);
 }
@@ -186,17 +186,17 @@ void ui_keypress(screen_t *screen, int c) {
 			case KEY_BACKSPACE: // Bullshit
 			case 127:
 				wmove(screen->win, y, x - 1);
-				wprintw(screen->win, " ");
+				waddch(screen->win, ' ');
 				x--;
 				break;
 			case 10: // Newline
 			case 13:
-				wprintw(screen->win, "%c", c);
+				waddch(screen->win, c);
 				x = 0;
 				break;
 			default:
 				//wprintw(screen->win, "%c = %d\n", c, c);
-				wprintw(screen->win, "%c", c);
+				waddch(screen->win, c);
 				x++;
 				break;
 		}
@@ -205,7 +205,7 @@ void ui_keypress(screen_t *screen, int c) {
 			x = 0;
 
 		if(x >= screen->w - 1)  {
-			wprintw(screen->win, "\n");
+			waddch(screen->win, '\n'); 
 			x = 0;
 		}
 
