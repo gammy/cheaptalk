@@ -1,13 +1,16 @@
 /*
  * Goal: Very simple p2p realtime chat which visually resembles 'talk'
- * - No daemon/multiuser/tty/user stuff, just p2p
  *
+ * Original goals: 
+ * - No daemon/multiuser/tty/user stuff, just p2p
  * [X] Realtime character-by-character tx/rx (no utf-8 support, eg won't use widechars)
  * [X] Allow resizing of terminal
  *   [X] Use half the horizontal height of a terminal for each user
  *   [X] Allow ANSI codes
  *     [ ] Translate ANSI text attributes to ncurses 
  *
+ * Added:
+ * - Simple color selection with ESC 0-6 or ESC r,g,b
  *
 */
 

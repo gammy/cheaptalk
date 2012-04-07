@@ -151,6 +151,14 @@ void ui_keypress(screen_t *screen, int c) {
 	if(escape) {
 		if(meta) {
 			switch(c) {
+				case 'A': // Up arrow
+					if(y > 0)
+						y--;
+					break;
+				case 'B': // Down arrow
+					if(y < screen->h - 1)
+						y++;
+					break;
 				case 'C': // Right arrow
 					// FIXME I know this is off by one.
 					//       It seems impossible to fix.
@@ -209,6 +217,7 @@ void ui_keypress(screen_t *screen, int c) {
 			case 13:
 				waddch(screen->win, c);
 				x = 0;
+				y++;
 				break;
 			default:
 				//wprintw(screen->win, "%c = %d\n", c, c);
