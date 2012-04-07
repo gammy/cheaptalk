@@ -119,7 +119,7 @@ int main(int argc, char *argv[]){
 		if(net_recv(mode, &c))
 			ui_keypress(&UI_BOT, c);
 
-		//mvwprintw(UI_SEP.win, 0, (UI_SEP.w / 2) - 4, "%d", counter++);
+		mvwprintw(UI_SEP.win, 0, (UI_SEP.w / 2) - 4, "%d", counter++);
 
 		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
 		
