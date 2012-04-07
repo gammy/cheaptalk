@@ -2,11 +2,11 @@
  * Goal: Very simple p2p realtime chat which visually resembles 'talk'
  * - No daemon/multiuser/tty/user stuff, just p2p
  *
- * - Realtime character-by-character tx/rx (no utf-8 support, eg won't use widechars)
- * - Allow resizing of terminal
- * - Use half the horizontal height of a terminal for each user
- * - Allow ANSI codes
- * - Use SDL_Net for networking (easily replaced with othher interface)
+ * [X] Realtime character-by-character tx/rx (no utf-8 support, eg won't use widechars)
+ * [X] Allow resizing of terminal
+ *   [X] Use half the horizontal height of a terminal for each user
+ *   [X] Allow ANSI codes
+ *     [ ] Translate ANSI text attributes to ncurses 
 */
 
 #include "main.h"
@@ -110,7 +110,6 @@ int main(int argc, char *argv[]){
 			ui_resize();
 
 		int c = wgetch(UI_TOP.win);
-		//int c = getch();
 
 		ui_keypress(&UI_TOP, c);
 		if(c != ERR)
