@@ -42,7 +42,7 @@ int main(int argc, char *argv[]){
 	};
 
 	int mode           = MODE_INVALID;
-	unsigned long port = DEFAULT_PORT;
+	char *port         = DEFAULT_PORT;
 	char *host         = NULL;
 
 	unsigned int i;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 				host = optarg;
 				break;
 			case 'p':
-				port = atoi(optarg);
+				port = optarg;
 				break;
 			case 'h':
 				usage(basename(argv[0]));
@@ -82,38 +82,44 @@ int main(int argc, char *argv[]){
 #ifdef DEBUG
 	if(mode == MODE_CLIENT)
 		printf("Host: %s\n", host);
-	printf("Port: %ld\n", port);
+	printf("Port: %s\n", port);
 	printf("Mode: %s\n", mode == MODE_CLIENT ? "Client" : "Server");
 #endif
 
-	//if(! net_begin(mode, host, port))
-	//	return(EXIT_FAILURE);
+	if(! net_begin(mode, host, port))
+		return(EXIT_FAILURE);
 
 	ui_nullify();
 	initscr();
 	cbreak();
 	noecho();
 	nodelay(stdscr, TRUE);
+	curs_set(2);
 	use_default_colors(); // Ensure user-set bg and/or fg-colors are respected
 	start_color();        // We want to allow passing ANSI color, so we need color
 	ui_resized(); 
 	ui_init();
+	nodelay(UI_TOP.win, TRUE);
 
 	char busy = 1; // FIXME maybe make global later so we can catch interrupts and shut down
+	int counter = 0;
 
 	while(busy) {
 
 		//if(ui_resized())
 		//	ui_resize();
 
-		// Local input to top window
-		int c = getch();
-		if(c != ERR) {
-			wprintw(UI_TOP.win, "%c", c);
-		}
+		int c = wgetch(UI_TOP.win);
+		//int c = getch();
 
-		// Remote data to bottom window
-		//net_read(mode);
+		ui_keypress(&UI_TOP, c);
+		if(c != ERR)
+			net_send(mode, &c);
+
+		if(net_recv(mode, &c))
+			ui_keypress(&UI_BOT, c);
+
+		//mvwprintw(UI_SEP.win, 0, (UI_SEP.w / 2) - 4, "%d", counter++);
 
 		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
 		
@@ -123,7 +129,7 @@ int main(int argc, char *argv[]){
 
 		ui_refresh();
 
-		usleep(50000);
+		usleep(5000);
 	}
 
 	endwin();
