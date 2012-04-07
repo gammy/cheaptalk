@@ -87,10 +87,6 @@ void ui_init(void) {
 
 	ui_refresh();
 
-	// Move cursors to bottom
-//	wmove(UI_TOP.win, top_h - 1, 0);
-//	wmove(UI_BOT.win, bot_h - 1, 0);
-
 }
 
 void ui_resize(void) {

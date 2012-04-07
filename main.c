@@ -93,21 +93,21 @@ int main(int argc, char *argv[]){
 	initscr();
 	cbreak();
 	noecho();
-	nodelay(stdscr, TRUE);
-	curs_set(2);
+	curs_set(1);
 	use_default_colors(); // Ensure user-set bg and/or fg-colors are respected
-	start_color();        // We want to allow passing ANSI color, so we need color
+	start_color();        // We want to eventually pass ANSI colors, so we need color
 	ui_resized(); 
 	ui_init();
 	nodelay(UI_TOP.win, TRUE);
 
-	char busy = 1; // FIXME maybe make global later so we can catch interrupts and shut down
+#ifdef DEBUG
 	int counter = 0;
+#endif
 
-	while(busy) {
+	for(;;) {
 
-		//if(ui_resized())
-		//	ui_resize();
+		if(ui_resized())
+			ui_resize();
 
 		int c = wgetch(UI_TOP.win);
 		//int c = getch();
@@ -119,21 +119,14 @@ int main(int argc, char *argv[]){
 		if(net_recv(mode, &c))
 			ui_keypress(&UI_BOT, c);
 
+#ifdef DEBUG
 		mvwprintw(UI_SEP.win, 0, (UI_SEP.w / 2) - 4, "%d", counter++);
-
-		//mvwprintw(UI_TOP.win, 0, 0, "%dx%d  ", UI_MAIN.w, UI_MAIN.h);
-		
-		//wprintw(UI_TOP.win, "Test\n");
-		//wprintw(UI_BOT.win, "Fist");
-		//wprintw(UI_BOT.win, "Fist\n");
+#endif
 
 		ui_refresh();
 
 		usleep(5000);
 	}
-
-	endwin();
-	net_deinit();
 
 	return(EXIT_SUCCESS);
 }
