@@ -23,8 +23,10 @@ void ui_destroy(void) {
 }
 
 void ui_refresh(void) {
-	unsigned int i;
-	for(i = 0; i < 3; i++)
+	// This is in reverse order to ensure that the cursor is always last
+	// set for the top window (ui_win[0] = UI_TOP)
+	int i;
+	for(i = 2; i > 0; i--)
 		if(ui_win[i].win != NULL)
 			wrefresh(ui_win[i].win);
 }
@@ -135,7 +137,7 @@ void ui_handle_wench(int s) {
 
 #endif
 
-// Warning: reentrant
+// Probably the most asinine part of this progeam.
 void ui_keypress(screen_t *screen, int c) {
 
 	static char escape, meta;
@@ -150,21 +152,22 @@ void ui_keypress(screen_t *screen, int c) {
 		if(meta) {
 			switch(c) {
 				case 'C': // Right arrow
-					if(x < screen->w - 1) {
+					// FIXME I know this is off by one.
+					//       It seems impossible to fix.
+					if(x < screen->w - 2)
 						x++;
-						wmove(screen->win, y, x);
-					}
 					break;
 				case 'D': // Left arrow
-					if(x > 0) {
+					if(x > 0)
 						x--;
-						wmove(screen->win, y, x);
-					}
 					break;
 				default:
 					break;
 			}
+			
+			wmove(screen->win, y, x);
 			meta = escape = 0;
+
 		} else {
 			switch(c) {
 				case 91:
@@ -176,25 +179,42 @@ void ui_keypress(screen_t *screen, int c) {
 		}
 
 	} else {
-		switch(c) {
+		switch(c) { 
 			case 27: // Escape
 				escape = 1;
 				break;
 			case KEY_BACKSPACE: // Bullshit
 			case 127:
-				if(x > 0) {
-					wmove(screen->win, y, x - 1);
-					wprintw(screen->win, " ");
-					x--;
-					wmove(screen->win, y, x);
-				}
+				wmove(screen->win, y, x - 1);
+				wprintw(screen->win, " ");
+				x--;
 				break;
-
+			case 10: // Newline
+			case 13:
+				wprintw(screen->win, "%c", c);
+				x = 0;
+				break;
 			default:
 				//wprintw(screen->win, "%c = %d\n", c, c);
 				wprintw(screen->win, "%c", c);
+				x++;
 				break;
 		}
+
+		if(x < 0)
+			x = 0;
+
+		if(x >= screen->w - 1)  {
+			wprintw(screen->win, "\n");
+			x = 0;
+		}
+
+		wmove(screen->win, y, x);
 	}
+
+#if 0
+	mvwprintw(UI_BOT.win, 1, 1, "%dx%d ", x, y);
+	wrefresh(UI_BOT.win);
+#endif
 		
 }
