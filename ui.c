@@ -173,15 +173,30 @@ void ui_keypress(screen_t *screen, int c) {
 				case 91:
 					meta = 1;
 					break;
+				case 'r': case 'R':
+					wcolor_set(screen->win, 1, NULL);
+					break;
+				case 'g': case 'G':
+					wcolor_set(screen->win, 2, NULL);
+					break;
+				case 'b': case 'B':
+					wcolor_set(screen->win, 3, NULL);
+					break;
 				default:
+					if(c > 47 && c <= 48+6)
+						wcolor_set(screen->win, c - 48, NULL);
 					break;
 			}
+
+			escape = 0;
+
 		}
 
 	} else {
 		switch(c) { 
 			case 27: // Escape
 				escape = 1;
+				return; // XXX
 				break;
 			case KEY_BACKSPACE: // Bullshit
 			case 127:

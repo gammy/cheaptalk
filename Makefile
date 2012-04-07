@@ -2,7 +2,7 @@
 EXE = cheaptalk
 SHELL = bash
 
-CFLAGS = -ggdb3 -Wall
+CFLAGS = -Wall
 LFLAGS = -lncurses 
 CC     = gcc
 OBJS   = $(patsubst %.c, %.o, $(wildcard ./*.c))

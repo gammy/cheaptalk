@@ -137,6 +137,13 @@ int main(int argc, char *argv[]){
 	curs_set(1);
 	use_default_colors(); // Ensure user-set bg and/or fg-colors are respected
 	start_color();        // We want to eventually pass ANSI colors, so we need color
+	init_pair(0, -1, -1);
+	init_pair(1, COLOR_RED,     -1);
+	init_pair(2, COLOR_GREEN,   -1);
+	init_pair(3, COLOR_BLUE,    -1);
+	init_pair(4, COLOR_YELLOW,  -1);
+	init_pair(5, COLOR_CYAN,    -1);
+	init_pair(6, COLOR_MAGENTA, -1);
 	ui_resized(); 
 	ui_init();
 	nodelay(UI_TOP.win, TRUE);
