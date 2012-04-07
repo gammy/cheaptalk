@@ -188,7 +188,8 @@ void ui_keypress(screen_t *screen, int c) {
 					break;
 			}
 
-			escape = 0;
+			if(! meta)
+				escape = 0;
 
 		}
 
