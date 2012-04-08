@@ -42,7 +42,7 @@ void usage(char *me) {
 void signal_handle(int sig) {
 	endwin();
 	fprintf(stderr, "Caught signal %d\n", sig);
-	net_deinit();
+	net_finish();
 	exit(EXIT_SUCCESS);
 }
 
@@ -124,9 +124,6 @@ int main(int argc, char *argv[]){
 	
 	signal_install();
 
-	if(! net_init())
-		return(EXIT_FAILURE);
-
 #ifdef DEBUG
 	if(mode == MODE_CLIENT)
 		printf("Host: %s\n", host);
@@ -170,11 +167,11 @@ int main(int argc, char *argv[]){
 
 		ui_keypress(&UI_TOP, c);
 		if(c != ERR)
-			net_send(mode, &c);
+			net_send(&c);
 
 		c = ERR;
 
-		if(net_recv(mode, &c))
+		if(net_recv(&c))
 			ui_keypress(&UI_BOT, c);
 
 #ifdef DEBUG
@@ -187,7 +184,7 @@ int main(int argc, char *argv[]){
 	}
 
 	endwin();
-	net_deinit();
+	net_finish();
 
 	return(EXIT_SUCCESS);
 }

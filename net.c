@@ -1,12 +1,8 @@
 #include "net.h"
 
-void net_deinit(void) {
+void net_finish(void) {
+	fsync(net_sock_client);
 	close(net_sock_client);
-}
-
-unsigned int net_init(void) {
-	atexit(net_deinit);
-	return(1);
 }
 
 void *net_get_addr(struct sockaddr *sa) {
@@ -180,23 +176,20 @@ unsigned int net_connect(char *host, char *port) {
 }
 
 unsigned int net_begin(unsigned int mode, char *host, char *port) {
-	
-	if(mode == MODE_SERVER) {
-		if(! net_listen(port))
-			return(0);
-	} else if(mode == MODE_CLIENT){
-		if(! net_connect(host, port))
-			return(0);
-	}
 
-	return(1);
+	if(mode != MODE_SERVER && mode != MODE_CLIENT) {
+		fprintf(stderr, "Error: net_begin called with invalid mode\n");
+		return(0);
+	}
+	
+	if(mode == MODE_SERVER)
+		return(net_listen(port));
+	
+	return(net_connect(host, port));
 }
 
-unsigned int net_send(unsigned int mode, chtype *c) {
+unsigned int net_send(chtype *c) {
 	
-	if(net_sock_client == -1)
-		abort();
-
 	if(send(net_sock_client, c, sizeof(char) * sizeof(chtype), MSG_DONTWAIT) == -1) {
 		endwin();
 		fprintf(stderr, "Error: send: %s\n", strerror(errno));
@@ -206,7 +199,7 @@ unsigned int net_send(unsigned int mode, chtype *c) {
 	return(1);
 }
 
-unsigned int net_recv(unsigned int mode, chtype *c) {
+unsigned int net_recv(chtype *c) {
 
 	int rx = 0;
 

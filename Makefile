@@ -12,6 +12,7 @@ all: $(EXE)
 $(EXE): $(OBJS)
 	@echo -e "\e[4;1m$@\e[0m"
 	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXE) $(OBJS)
+	@strip $(EXE)
 	@echo
 	@echo "Success: $(EXE)"
 

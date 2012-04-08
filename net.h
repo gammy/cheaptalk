@@ -15,12 +15,11 @@ int net_sock_client;
 #include <netdb.h>
 #include <arpa/inet.h>
 
-void net_deinit(void);
-unsigned int net_init(void);
+void net_finish(void);
 void *net_get_addr(struct sockaddr *sa);
 unsigned int net_listen(char *port);
 unsigned int net_connect(char *host, char *port);
 unsigned int net_begin(unsigned int mode, char *host, char *port);
-unsigned int net_send(unsigned int mode, chtype *c);
-unsigned int net_recv(unsigned int mode, chtype *c);
+unsigned int net_send(chtype *c);
+unsigned int net_recv(chtype *c);
 #endif
