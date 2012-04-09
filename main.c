@@ -6,7 +6,7 @@
  * [X] Realtime character-by-character tx/rx (no utf-8 support, eg won't use widechars)
  * [X] Allow resizing of terminal
  *   [X] Use half the horizontal height of a terminal for each user
- *   [X] Allow ANSI codes
+ *   [ ] Allow ANSI codes
  *     [ ] Translate ANSI text attributes to ncurses 
  *         (but why bother? How would you 'paste' escape sequences to the buffer?)
  *
