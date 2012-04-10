@@ -139,8 +139,10 @@ void ui_handle_wench(int s) {
 
 // Probably the most asinine part of this progeam.
 void ui_keypress(screen_t *screen, int c) {
+	
+	unsigned int i = screen == &UI_TOP ? 0 : 1;
 
-	static char escape, meta;
+	static char escape[2], meta[2];
 
 	if(c == ERR || c >= KEY_MIN)
 		return;
@@ -148,8 +150,8 @@ void ui_keypress(screen_t *screen, int c) {
 	int x, y;
 	getyx(screen->win, y, x);
 
-	if(escape) {
-		if(meta) {
+	if(escape[i]) {
+		if(meta[i]) {
 			switch(c) {
 				case 'A': // Up arrow
 					if(y > 0)
@@ -173,12 +175,12 @@ void ui_keypress(screen_t *screen, int c) {
 			}
 			
 			wmove(screen->win, y, x);
-			meta = escape = 0;
+			meta[i] = escape[i] = 0;
 
 		} else {
 			switch(c) {
 				case '[':
-					meta = 1;
+					meta[i] = 1;
 					break;
 				case 'r': case 'R':
 					wcolor_set(screen->win, 1, NULL);
@@ -195,8 +197,8 @@ void ui_keypress(screen_t *screen, int c) {
 					break;
 			}
 
-			if(! meta)
-				escape = 0;
+			if(! meta[i])
+				escape[i] = 0;
 
 		}
 
@@ -206,7 +208,7 @@ void ui_keypress(screen_t *screen, int c) {
 				busy = 0;
 				break;
 			case UI_KEY_ESC:
-				escape = 1;
+				escape[i] = 1;
 				return; // XXX
 				break;
 			case KEY_BACKSPACE: // Bullshit
