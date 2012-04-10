@@ -40,7 +40,7 @@ unsigned int net_listen(char *port) {
 
         // Get addresses which we can bind to
 	if((rv = getaddrinfo(NULL, port, &hints, &servinfo)) != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
+		fprintf(stderr, "Error: getaddrinfo: %s\n", gai_strerror(rv));
 		return(0);
 	}
 
@@ -134,13 +134,16 @@ unsigned int net_connect(char *host, char *port) {
 
 	while(1) {
 
+		net_sock_client = -1;
+
 		// loop through all the results and connect to the first we can
 		for(p = servinfo; p != NULL; p = p->ai_next) {
 
 			if((net_sock_client = socket(p->ai_family, 
-						      p->ai_socktype,
-						      p->ai_protocol)) == -1) {
+						     p->ai_socktype,
+						     p->ai_protocol)) == -1) {
 				fprintf(stderr, "Error: socket: %s\n", strerror(errno));
+				sleep(2);
 				continue;
 			}
 
@@ -153,6 +156,7 @@ unsigned int net_connect(char *host, char *port) {
 
 				close(net_sock_client);
 				fprintf(stderr, "%s\n", strerror(errno));
+				sleep(2);
 				continue;
 			}
 
@@ -162,7 +166,6 @@ unsigned int net_connect(char *host, char *port) {
 		if(p)
 			break;
 
-		sleep(2);
 	}
 
 	inet_ntop(p->ai_family, 

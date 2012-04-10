@@ -24,27 +24,26 @@
 
 void usage(char *me) {
 	printf("Cheaptalk v%s by gammy\n"
-	       "Usage: %s [options]\n"
+	       "Usage: %s [options]\n\n"
 	       "To wait for a friend  : %s --listen\n"
-	       "To connect to a friend: %s --connect <friends hostname>\n\n"
+	       "To connect to a friend: %s --connect <address>\n\n"
 	       "-l  --listen                Wait for someone to connect to you\n"
 	       "-c  --connect <host>        Connect to <host>\n"
-	       "-p  --port <port>           Listen or connect using port <port>\n"
+	       "-p  --port <port>           Listen or connect using port <port> (default %s)\n"
 	       "-h  --help                  This help\n"
 	       "-V  --version               Display version\n\n"
 	       "This is free software; see the source for copying conditions. "
 	       "There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS "
 	       "FOR A PARTICULAR PURPOSE.\n\n",
 	       VERSION, 
-	       me, me, me);
+	       me, me, me, DEFAULT_PORT);
 }
 
 void signal_handle(int sig) {
 	endwin();
 	fprintf(stderr, "Caught signal %d\n", sig);
-	busy = 0;
-	//net_finish();
-	//exit(EXIT_SUCCESS);
+	net_finish();
+	exit(EXIT_SUCCESS);
 }
 
 void signal_install(void) {
@@ -187,9 +186,6 @@ int main(int argc, char *argv[]){
 
 	net_finish();
 	endwin();
-
-	if(busy == 2)
-		printf("Other side closed the connection\n");
 
 	return(EXIT_SUCCESS);
 }
