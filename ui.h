@@ -3,7 +3,13 @@
 
 #include "main.h"
 
-#define UI_MIN_HEIGHT 5
+#define UI_MIN_HEIGHT      5
+
+#define UI_KEY_ESC         27
+#define UI_KEY_BACKSPACE   127
+#define UI_KEY_EOT         4
+#define UI_KEY_CR          13
+#define UI_KEY_LF          10
 
 typedef struct {
 	WINDOW *win;

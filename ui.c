@@ -177,7 +177,7 @@ void ui_keypress(screen_t *screen, int c) {
 
 		} else {
 			switch(c) {
-				case 91:
+				case '[':
 					meta = 1;
 					break;
 				case 'r': case 'R':
@@ -202,18 +202,23 @@ void ui_keypress(screen_t *screen, int c) {
 
 	} else {
 		switch(c) { 
-			case 27: // Escape
+			case UI_KEY_EOT: // ^D (End Of Transmission)
+				endwin();
+				printf("Remote side closed the connection\n");
+				busy = 0;
+				break;
+			case UI_KEY_ESC:
 				escape = 1;
 				return; // XXX
 				break;
 			case KEY_BACKSPACE: // Bullshit
-			case 127:
+			case UI_KEY_BACKSPACE:
 				wmove(screen->win, y, x - 1);
 				waddch(screen->win, ' ');
 				x--;
 				break;
-			case 10: // Newline
-			case 13:
+			case UI_KEY_CR: // Newline
+			case UI_KEY_LF:
 				waddch(screen->win, c);
 				x = 0;
 				y++;

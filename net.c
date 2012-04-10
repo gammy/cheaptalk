@@ -1,6 +1,8 @@
 #include "net.h"
 
 void net_finish(void) {
+	chtype tmp = UI_KEY_EOT;
+	net_send(&tmp);
 	fsync(net_sock_client);
 	close(net_sock_client);
 }

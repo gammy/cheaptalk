@@ -11,7 +11,7 @@
  *         (but why bother? How would you 'paste' escape sequences to the buffer?)
  *
  * Missing (which talk can do)
- * - Scroll in buffer (ctrl+p/n in talk, only for the bottom buffer?)
+ * - Scroll in buffer (ESC p/n for top, ctrl+p/n for bottom)
  *
  * Added:
  * - Simple color selection with ESC 0-6 or ESC r,g,b
@@ -42,8 +42,9 @@ void usage(char *me) {
 void signal_handle(int sig) {
 	endwin();
 	fprintf(stderr, "Caught signal %d\n", sig);
-	net_finish();
-	exit(EXIT_SUCCESS);
+	busy = 0;
+	//net_finish();
+	//exit(EXIT_SUCCESS);
 }
 
 void signal_install(void) {
@@ -165,26 +166,30 @@ int main(int argc, char *argv[]){
 
 		chtype c = wgetch(UI_TOP.win);
 
-		ui_keypress(&UI_TOP, c);
-		if(c != ERR)
+		if(c != ERR) {
+			ui_keypress(&UI_TOP, c);
 			net_send(&c);
+			c = ERR; // Invalidate
+			ui_refresh();
+		}
 
-		c = ERR;
-
-		if(net_recv(&c))
+		if(net_recv(&c)) {
 			ui_keypress(&UI_BOT, c);
+			ui_refresh();
+		}
 
 #ifdef DEBUG
 		mvwprintw(UI_SEP.win, 0, (UI_SEP.w / 2) - 4, "%d", counter++);
 #endif
 
-		ui_refresh();
-
 		usleep(5000);
 	}
 
-	endwin();
 	net_finish();
+	endwin();
+
+	if(busy == 2)
+		printf("Other side closed the connection\n");
 
 	return(EXIT_SUCCESS);
 }
