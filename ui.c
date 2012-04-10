@@ -203,8 +203,6 @@ void ui_keypress(screen_t *screen, int c) {
 	} else {
 		switch(c) { 
 			case UI_KEY_EOT: // ^D (End Of Transmission)
-				endwin();
-				printf("Remote side closed the connection\n");
 				busy = 0;
 				break;
 			case UI_KEY_ESC:
