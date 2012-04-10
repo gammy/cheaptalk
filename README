@@ -1,7 +1,5 @@
 Simple p2p realtime chat which visually resembles UNIX 'talk'
 
-It's still a bit glitchy but works.
-
 Get / build / run:
 
 $ git clone git://github.com/gammy/cheaptalk.git
