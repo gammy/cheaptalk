@@ -6,3 +6,7 @@ $ git clone git://github.com/gammy/cheaptalk.git
 $ cd cheaptalk
 $ make
 $ ./cheaptalk
+
+Change color of the text by hitting ESC followed by r,g,b or a number from 
+0 (default) to 6. You should be able to move around your window with the arrow
+keys.
