@@ -233,11 +233,6 @@ void ui_keypress(screen_t *screen, int c) {
 		if(x < 0)
 			x = 0;
 
-		if(x >= screen->w - 1)  {
-			waddch(screen->win, '\n'); 
-			x = 0;
-		}
-
 		wmove(screen->win, y, x);
 	}
 
