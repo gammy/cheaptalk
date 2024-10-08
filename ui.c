@@ -1,5 +1,7 @@
 #include "ui.h"
 
+screen_t ui_win[4];
+
 void ui_nullify(void) {
 	unsigned int i;
 	for(i = 0; i < 3; i++) {

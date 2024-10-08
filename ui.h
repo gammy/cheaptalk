@@ -22,7 +22,7 @@ typedef struct {
 // | Bottom              |
 // +---------------------+
 
-screen_t ui_win[4];
+extern screen_t ui_win[4]; // ui.c
 
 #define UI_TOP		(ui_win[0])
 #define UI_SEP		(ui_win[1])

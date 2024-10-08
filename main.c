@@ -22,6 +22,8 @@
 
 #include "main.h"
 
+char busy;
+
 void usage(char *me) {
 	printf("Cheaptalk v%s by gammy\n"
 	       "Usage: %s [options]\n\n"

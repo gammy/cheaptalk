@@ -5,7 +5,7 @@
 
 #define DEFAULT_PORT	"13512"
 
-int net_sock_client;
+extern int net_sock_client; // net.c
 
 #include <errno.h>
 #include <string.h>

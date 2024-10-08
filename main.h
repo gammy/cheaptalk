@@ -18,13 +18,13 @@
 #include "ui.h"
 #include "net.h"
 
-char busy;
+extern char busy; // main.c
 
-enum {
+enum modes_t {
 	MODE_INVALID,
 	MODE_SERVER,
 	MODE_CLIENT
-} modes;
+};
 
 void usage(char *me);
 void curses_init(void);
