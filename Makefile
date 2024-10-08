@@ -11,14 +11,14 @@ all: $(EXE)
 
 $(EXE): $(OBJS)
 	@echo -e "\e[4;1m$@\e[0m"
-	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXE) $(OBJS)
+	$(CC) -o $(EXE) $(OBJS) $(LFLAGS)
 	@strip $(EXE)
 	@echo
 	@echo "Success: $(EXE)"
 
 %.o: %.c
 	@echo -e "\e[4;1m$@\e[0m"
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) -c $(CFLAGS) -o $@ $<
 	@echo
 
 clean:
